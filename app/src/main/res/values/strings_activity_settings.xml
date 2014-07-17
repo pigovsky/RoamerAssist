@@ -1,0 +1,33 @@
+<resources>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>1 second</item>
+        <item>5 seconds</item>
+        <item>1 minute</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>1000</item>
+        <item>5000</item>
+        <item>60000</item>
+        <item>1800000</item>
+        <item>3600000</item>
+    </string-array>
+
+    <string name="pref_title_delta_meters">Minimal delta in meters</string>
+    <string-array name="pref_delta_meters_titles">
+        <item>5 meters</item>
+        <item>100 meters</item>
+        <item>500 meters</item>
+        <item>1 kilometer</item>
+    </string-array>
+    <string-array name="pref_delta_meters_values">
+        <item>5</item>
+        <item>100</item>
+        <item>5000</item>
+        <item>10000</item>
+    </string-array>
+</resources>
