@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -26,9 +25,9 @@ import java.util.Date;
 
 
 public class MainActivity extends FragmentActivity
-    implements View.OnClickListener, LocationListener, SharedPreferences.OnSharedPreferenceChangeListener {
+    implements LocationListener, SharedPreferences.OnSharedPreferenceChangeListener {
     private static Trip trip;
-    private Button buttonRecord;
+    private MenuItem buttonRecord;
     private boolean recordingInProgress;
     private LocationManager locationManager;
     private String locationProvider;
@@ -49,21 +48,15 @@ public class MainActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        buttonRecord = (Button)findViewById(R.id.button_record);
+
+        locationManager = (LocationManager)
+                getSystemService(Context.LOCATION_SERVICE);
 
         progressBar = (ProgressBar)findViewById(R.id.progressbar_address);
 
         setTrip(new Trip(this));
 
         setRecordingInProgress(false);
-
-        for(int id : new int[] {
-                R.id.button_settings,
-                R.id.button_read_addresses,
-                R.id.button_record,
-                R.id.button_map
-        } )
-            findViewById(id).setOnClickListener(this);
 
         ((ListView)findViewById(R.id.list_trip_points)).setAdapter(getTrip());
 
@@ -76,16 +69,31 @@ public class MainActivity extends FragmentActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        buttonRecord = menu.findItem(R.id.action_record);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.action_record:
+                onRecordClick();
+                break;
+            case R.id.action_addresses:
+                onReadAddressesClick();
+                break;
+            case R.id.action_map:
+                startActivity(new Intent(this, MapActivity.class));
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
     }
 
     public void onReadAddressesClick()
@@ -93,24 +101,6 @@ public class MainActivity extends FragmentActivity
         Toast.makeText(this,"Try reading addresses",Toast.LENGTH_SHORT).show();
         progressBar.setVisibility(View.VISIBLE);
         (new GetAddressTask(this)).execute(getTrip());
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.button_record:
-                onRecordClick();
-                break;
-            case R.id.button_read_addresses:
-                onReadAddressesClick();
-                break;
-            case R.id.button_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
-            case R.id.button_map:
-                startActivity(new Intent(this, MapActivity.class));
-                break;
-        }
     }
 
     private void onRecordClick() {
@@ -122,9 +112,6 @@ public class MainActivity extends FragmentActivity
 
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
-
-        locationManager = (LocationManager)
-                getSystemService(Context.LOCATION_SERVICE);
 
         locationProvider =
                 locationManager.getBestProvider(criteria,true);
@@ -175,7 +162,9 @@ public class MainActivity extends FragmentActivity
 
     protected void setRecordingInProgress(boolean recordingInProgress) {
         this.recordingInProgress = recordingInProgress;
-        buttonRecord.setText(recordingInProgress?"Pause":"Record");
+        if (buttonRecord!=null)
+            buttonRecord.setTitle(
+                getString(recordingInProgress ? R.string.action_pause : R.string.action_record));
     }
 
     public void addressesWereRead(boolean ok)
