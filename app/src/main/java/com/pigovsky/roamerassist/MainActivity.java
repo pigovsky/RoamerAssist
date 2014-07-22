@@ -27,7 +27,7 @@ import java.util.Date;
 
 public class MainActivity extends FragmentActivity
     implements View.OnClickListener, LocationListener, SharedPreferences.OnSharedPreferenceChangeListener {
-    private Trip trip;
+    private static Trip trip;
     private Button buttonRecord;
     private boolean recordingInProgress;
     private LocationManager locationManager;
@@ -37,6 +37,14 @@ public class MainActivity extends FragmentActivity
 
     private ProgressBar progressBar;
 
+    public static Trip getTrip() {
+        return trip;
+    }
+
+    public static void setTrip(Trip trip) {
+        MainActivity.trip = trip;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +53,7 @@ public class MainActivity extends FragmentActivity
 
         progressBar = (ProgressBar)findViewById(R.id.progressbar_address);
 
-        trip = new Trip(this);
+        setTrip(new Trip(this));
 
         setRecordingInProgress(false);
 
@@ -55,9 +63,9 @@ public class MainActivity extends FragmentActivity
                 R.id.button_record,
                 R.id.button_map
         } )
-            ((Button)findViewById(id)).setOnClickListener(this);
+            findViewById(id).setOnClickListener(this);
 
-        ((ListView)findViewById(R.id.list_trip_points)).setAdapter(trip);
+        ((ListView)findViewById(R.id.list_trip_points)).setAdapter(getTrip());
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -77,17 +85,14 @@ public class MainActivity extends FragmentActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     public void onReadAddressesClick()
     {
         Toast.makeText(this,"Try reading addresses",Toast.LENGTH_SHORT).show();
         progressBar.setVisibility(View.VISIBLE);
-        (new GetAddressTask(this)).execute(trip);
+        (new GetAddressTask(this)).execute(getTrip());
     }
 
     @Override
@@ -146,7 +151,7 @@ public class MainActivity extends FragmentActivity
     public void onLocationChanged(Location location) {
         Point point = new Point(new Date(), location);
         Toast.makeText(this,"Location "+point, Toast.LENGTH_SHORT).show();
-        trip.addPoint(point);
+        getTrip().addPoint(point);
     }
 
     @Override
@@ -177,7 +182,7 @@ public class MainActivity extends FragmentActivity
     {
         progressBar.setVisibility(View.GONE);
         if (ok)
-            trip.notifyDataSetChanged();
+            getTrip().notifyDataSetChanged();
     }
 
     @Override

@@ -1,28 +1,30 @@
 package com.pigovsky.roamerassist.model;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.pigovsky.roamerassist.helpers.GeocoderHelper;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
- * Created by yp on 17.07.2014.
+ * Point class by Pigovsky on 17.07.2014.
  */
 public class Point {
     private Date date;
     private Location location;
     private String address;
     private int color = Color.GREEN;
+
+    public LatLng getLatLng(){
+        return new LatLng(location.getLatitude(), location.getLongitude());
+    }
 
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
@@ -50,7 +52,7 @@ public class Point {
             return;
         }
 
-        List<Address> addresses = null;
+        List<Address> addresses;
         try {
             addresses = geocoder.getFromLocation(location.getLatitude(),
                     location.getLongitude(), 1);

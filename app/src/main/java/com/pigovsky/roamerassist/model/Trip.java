@@ -2,23 +2,23 @@ package com.pigovsky.roamerassist.model;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.pigovsky.roamerassist.R;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by yp on 17.07.2014.
+ * Trip class by Pigovsky on 17.07.2014.
  */
-public class Trip extends BaseAdapter
+public class Trip extends BaseAdapter implements Iterable<LatLng>
 {
     private List<Point> points = new ArrayList<Point>();
 
@@ -126,5 +126,28 @@ public class Trip extends BaseAdapter
 
     public List<Point> getPoints() {
         return points;
+    }
+
+    @Override
+    public Iterator<LatLng> iterator() {
+        return new Iterator<LatLng>(){
+            int current = -1;
+
+            @Override
+            public boolean hasNext() {
+                return points.size()>0 && current < points.size();
+            }
+
+            @Override
+            public LatLng next() {
+                Point p = points.get(++current);
+                return p.getLatLng();
+            }
+
+            @Override
+            public void remove() {
+                points.remove(current);
+            }
+        };
     }
 }

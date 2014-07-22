@@ -1,12 +1,15 @@
 package com.pigovsky.roamerassist;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.pigovsky.roamerassist.model.Point;
+
+import java.util.List;
 
 public class MapActivity extends FragmentActivity {
 
@@ -60,6 +63,28 @@ public class MapActivity extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        if (mMap == null)
+            return;
+
+        List<Point> points = MainActivity.getTrip().getPoints();
+
+        if (points.size()>0) {
+            Point startPoint = points.get(0);
+            mMap.addMarker(new MarkerOptions().position(startPoint.getLatLng()).title(startPoint.toString()));
+        }
+
+        for (int i=0; i<points.size()-1; i++) {
+            PolylineOptions polylineOptions = new PolylineOptions();
+            polylineOptions.add(points.get(i).getLatLng());
+            polylineOptions.add(points.get(i+1).getLatLng());
+            polylineOptions.color(points.get(i).getColor());
+            mMap.addPolyline(polylineOptions);
+        }
+
+        if (points.size()>1) {
+            Point endPoint = points.get(points.size()-1);
+            mMap.addMarker(new MarkerOptions().position(endPoint.getLatLng()).title(endPoint.toString()));
+        }
+
     }
 }
