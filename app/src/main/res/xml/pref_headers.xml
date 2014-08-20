@@ -3,7 +3,7 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.pigovsky.roamerassist.SettingsActivity$GeneralPreferenceFragment"
-        android:title="@string/title_activity_settings" />
+        android:fragment="com.pigovsky.roamerassist.activity.SettingsActivity$GeneralPreferenceFragment"
+        android:title="@string/title_activity_settings"/>
 
 </preference-headers>

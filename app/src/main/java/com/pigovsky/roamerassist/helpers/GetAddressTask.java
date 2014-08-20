@@ -1,11 +1,12 @@
-package com.pigovsky.roamerassist.model;
+package com.pigovsky.roamerassist.helpers;
 
-import android.content.Context;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Build;
 
-import com.pigovsky.roamerassist.MainActivity;
+import com.pigovsky.roamerassist.activity.MainActivity;
+import com.pigovsky.roamerassist.model.Point;
+import com.pigovsky.roamerassist.model.Trip;
 
 import java.util.Locale;
 
@@ -21,7 +22,7 @@ public class GetAddressTask extends
     public GetAddressTask(MainActivity context) {
         super();
 
-        activity=context;
+        activity = context;
 
         if (Build.VERSION.SDK_INT >=
                 Build.VERSION_CODES.GINGERBREAD
@@ -37,8 +38,9 @@ public class GetAddressTask extends
 
         Trip trip = params[0];
 
-        for(Point p : trip.getPoints())
+        for (Point p : trip.getPoints()) {
             p.readAddress(geocoder);
+        }
 
         return true;
     }

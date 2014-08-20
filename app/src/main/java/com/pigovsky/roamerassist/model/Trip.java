@@ -8,64 +8,69 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.pigovsky.roamerassist.R;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * Trip class by Pigovsky on 17.07.2014.
  */
-public class Trip extends BaseAdapter implements Iterable<LatLng>
-{
+public class Trip extends BaseAdapter {
+    static int[] rowIds = new int[]{
+            R.id.textview_time,
+            R.id.textview_address,
+    };
     private List<Point> points = new ArrayList<Point>();
-
     private LayoutInflater inflater;
 
-    private long getMinDuration()
-    {
+    public Trip(Context c) {
+        inflater = LayoutInflater.from(c);
+    }
+
+    private long getMinDuration() {
         long res = getDuration(0);
 
-        for(int i=1; i<getPoints().size()-1; i++) {
+        for (int i = 1; i < getPoints().size() - 1; i++) {
             long duration = getDuration(i);
-            if(duration < res)
+            if (duration < res) {
                 res = duration;
+            }
         }
         return res;
     }
 
-    private long getMaxDuration()
-    {
+    private long getMaxDuration() {
         long res = getDuration(0);
 
-        for(int i=1; i<getPoints().size()-1; i++) {
+        for (int i = 1; i < getPoints().size() - 1; i++) {
             long duration = getDuration(i);
-            if(duration > res)
+            if (duration > res) {
                 res = duration;
+            }
         }
         return res;
     }
 
     private long getDuration(int i) {
-        if (getPoints().size()<=1)
+        if (getPoints().size() <= 1) {
             return 0;
-        return getPoints().get(i+1).getDateInMilliseconds()-
+        }
+        return getPoints().get(i + 1).getDateInMilliseconds() -
                 getPoints().get(i).getDateInMilliseconds();
     }
 
-    public void addPoint(Point point){
+    public void addPoint(Point point) {
         getPoints().add(point);
 
         double minDuration = getMinDuration();
         double maxDuration = getMaxDuration();
-        double delta = maxDuration-minDuration;
+        double delta = maxDuration - minDuration;
 
-        if (delta>0.0){
-            for(int i=0; i<getPoints().size()-1; i++) {
-                double alpha = (getDuration(i)-minDuration)/delta * 255;
-                int color = Color.rgb((int)alpha, 255-(int)alpha, 0 );
+        if (delta > 0.0) {
+            for (int i = 0; i < getPoints().size() - 1; i++) {
+                double alpha = (getDuration(i) - minDuration) / delta * 255;
+                int color = Color.rgb((int) alpha, 255 - (int) alpha, 0);
                 getPoints().get(i).setColor(color);
             }
         }
@@ -73,14 +78,8 @@ public class Trip extends BaseAdapter implements Iterable<LatLng>
         notifyDataSetChanged();
     }
 
-    public Trip(Context c)
-    {
-        inflater = LayoutInflater.from(c);
-    }
-
     @Override
-    public int getCount()
-    {
+    public int getCount() {
         return getPoints().size();
     }
 
@@ -94,29 +93,25 @@ public class Trip extends BaseAdapter implements Iterable<LatLng>
         return position;
     }
 
-    static int[] rowIds = new int[]{
-            R.id.textview_time,
-            R.id.textview_address,
-            };
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Point point = getPoints().get(position);
         String[] stringRow = point.asStringRow();
         View v = convertView;
         TextView[] row;
-        if (convertView == null || convertView.getTag()==null){
+        if (convertView == null || convertView.getTag() == null) {
             v = inflater.inflate(R.layout.row, null);
 
             row = new TextView[rowIds.length];
-            for(int i=0; i<row.length; i++)
-                row[i]=(TextView) v.findViewById(rowIds[i]);
+            for (int i = 0; i < row.length; i++) {
+                row[i] = (TextView) v.findViewById(rowIds[i]);
+            }
 
             v.setTag(row);
         }
-        row = (TextView[])v.getTag();
+        row = (TextView[]) v.getTag();
 
-        for(int i=0; i<row.length; i++) {
+        for (int i = 0; i < row.length; i++) {
             row[i].setText(stringRow[i]);
             row[i].setTextColor(point.getColor());
         }
@@ -126,28 +121,5 @@ public class Trip extends BaseAdapter implements Iterable<LatLng>
 
     public List<Point> getPoints() {
         return points;
-    }
-
-    @Override
-    public Iterator<LatLng> iterator() {
-        return new Iterator<LatLng>(){
-            int current = -1;
-
-            @Override
-            public boolean hasNext() {
-                return points.size()>0 && current < points.size();
-            }
-
-            @Override
-            public LatLng next() {
-                Point p = points.get(++current);
-                return p.getLatLng();
-            }
-
-            @Override
-            public void remove() {
-                points.remove(current);
-            }
-        };
     }
 }

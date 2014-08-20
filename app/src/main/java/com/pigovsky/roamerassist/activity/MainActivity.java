@@ -1,4 +1,4 @@
-package com.pigovsky.roamerassist;
+package com.pigovsky.roamerassist.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +17,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.pigovsky.roamerassist.model.GetAddressTask;
+import com.pigovsky.roamerassist.R;
+import com.pigovsky.roamerassist.helpers.GetAddressTask;
 import com.pigovsky.roamerassist.model.Point;
 import com.pigovsky.roamerassist.model.Trip;
 
@@ -25,7 +26,7 @@ import java.util.Date;
 
 
 public class MainActivity extends FragmentActivity
-    implements LocationListener, SharedPreferences.OnSharedPreferenceChangeListener {
+        implements LocationListener, SharedPreferences.OnSharedPreferenceChangeListener {
     private static Trip trip;
     private MenuItem buttonRecord;
     private boolean recordingInProgress;
@@ -52,13 +53,13 @@ public class MainActivity extends FragmentActivity
         locationManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
 
-        progressBar = (ProgressBar)findViewById(R.id.progressbar_address);
+        progressBar = (ProgressBar) findViewById(R.id.progressbar_address);
 
         setTrip(new Trip(this));
 
         setRecordingInProgress(false);
 
-        ((ListView)findViewById(R.id.list_trip_points)).setAdapter(getTrip());
+        ((ListView) findViewById(R.id.list_trip_points)).setAdapter(getTrip());
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -83,7 +84,7 @@ public class MainActivity extends FragmentActivity
                 onReadAddressesClick();
                 break;
             case R.id.action_map:
-                startActivity(new Intent(this, MapActivity.class));
+
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -96,9 +97,8 @@ public class MainActivity extends FragmentActivity
         return true;
     }
 
-    public void onReadAddressesClick()
-    {
-        Toast.makeText(this,"Try reading addresses",Toast.LENGTH_SHORT).show();
+    public void onReadAddressesClick() {
+        Toast.makeText(this, "Try reading addresses", Toast.LENGTH_SHORT).show();
         progressBar.setVisibility(View.VISIBLE);
         (new GetAddressTask(this)).execute(getTrip());
     }
@@ -114,12 +114,11 @@ public class MainActivity extends FragmentActivity
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
 
         locationProvider =
-                locationManager.getBestProvider(criteria,true);
+                locationManager.getBestProvider(criteria, true);
 
-        if (locationProvider==null) {
+        if (locationProvider == null) {
             Toast.makeText(this, "Cannot access to GPS. Is it turned on?", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             trackGPS();
             setRecordingInProgress(true);
         }
@@ -127,7 +126,7 @@ public class MainActivity extends FragmentActivity
 
     private void trackGPS() {
         float minDistance = Float.parseFloat(sharedPreferences.getString("delta_meters", "5"));
-        long minDuration = Long.parseLong(sharedPreferences.getString("sync_frequency","5000"));
+        long minDuration = Long.parseLong(sharedPreferences.getString("sync_frequency", "5000"));
         Toast.makeText(this, String.format("Provider %s, min.duration %d, min.distance %f", locationProvider,
                 minDuration, minDistance), Toast.LENGTH_SHORT).show();
         locationManager.requestLocationUpdates(
@@ -137,7 +136,7 @@ public class MainActivity extends FragmentActivity
     @Override
     public void onLocationChanged(Location location) {
         Point point = new Point(new Date(), location);
-        Toast.makeText(this,"Location "+point, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Location " + point, Toast.LENGTH_SHORT).show();
         getTrip().addPoint(point);
     }
 
@@ -162,21 +161,22 @@ public class MainActivity extends FragmentActivity
 
     protected void setRecordingInProgress(boolean recordingInProgress) {
         this.recordingInProgress = recordingInProgress;
-        if (buttonRecord!=null)
+        if (buttonRecord != null) {
             buttonRecord.setTitle(
-                getString(recordingInProgress ? R.string.action_pause : R.string.action_record));
+                    getString(recordingInProgress ? R.string.action_pause : R.string.action_record));
+        }
     }
 
-    public void addressesWereRead(boolean ok)
-    {
+    public void addressesWereRead(boolean ok) {
         progressBar.setVisibility(View.GONE);
-        if (ok)
+        if (ok) {
             getTrip().notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if (isRecordingInProgress()){
+        if (isRecordingInProgress()) {
             locationManager.removeUpdates(this);
             trackGPS();
         }

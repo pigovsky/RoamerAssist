@@ -9,5 +9,10 @@
     <string name="action_addresses">Addresses</string>
     <string name="action_map">Map</string>
     <string name="action_pause">Pause</string>
+    <string name="title_activity_welcome">WelcomeActivity</string>
+    <string name="searchByAddress">Search address</string>
+    <string name="calculate_route">Calculate route</string>
+    <string name="typeAddress">Type address:</string>
+    <string name="search">Search</string>
 
 </resources>
