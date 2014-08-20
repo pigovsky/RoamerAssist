@@ -49,24 +49,23 @@
         android:layout_height="match_parent"
         android:layout_below="@id/buttonMarkRouteStart"/>
 
-    <Button
-        android:id="@+id/buttonCalculateRoute"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@id/buttonMarkRouteFinish"
-        android:text="@string/calculate_route"
-        android:textSize="10dp"
-        />
 
     <Button
         android:id="@+id/buttonSearchByAddressActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/buttonMarkRouteFinish"
         android:text="@string/searchByAddress"
         android:textSize="10dp"/>
+
+    <Button
+        android:id="@+id/buttonCalculateRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/calculate_route"
+        />
 
 </RelativeLayout>

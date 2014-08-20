@@ -157,8 +157,8 @@ public class WelcomeActivity extends Activity implements IRouteReceiver, View.On
                 R.drawable.point);
 
         distanceMarkerStyleSet = new StyleSet<MarkerStyle>(
-                MarkerStyle.builder().setBitmap(distanceMarker).setColor(Color.RED)
-                        .setSize(MARKER_SIZE).build()
+                MarkerStyle.builder().setBitmap(distanceMarker).setColor(Color.BLUE)
+                        .setSize(.2f).build()
         );
 
         Bitmap olMarker = UnscaledBitmapLoader.decodeResource(getResources(),
@@ -238,7 +238,9 @@ public class WelcomeActivity extends Activity implements IRouteReceiver, View.On
 
         RoutePointsHelper.Point location = App.getInstance().getLocation();
         if (location != null) {
-            mapView.setFocusPoint(mapView.getLayers().getBaseProjection().fromWgs84(location.getLongitude(), location.getLatitude()));
+            MapPos focusPoint = mapView.getLayers().getBaseProjection().fromWgs84(location.getLongitude(), location.getLatitude());
+            mapListener.onMapClicked(focusPoint.x, focusPoint.y, false);
+            mapView.setFocusPoint(focusPoint);
         }
     }
 
@@ -381,8 +383,15 @@ public class WelcomeActivity extends Activity implements IRouteReceiver, View.On
         markerLayer.clear();
         markerLayer.add(startMarker);
         markerLayer.add(stopMarker);
-        for (Marker marker : RoutePointsHelper.calculateMarksOnRegularDistances(RoutePointsHelper.toPoints(route.getRouteLine().getVertexList()),
-                10000d, distanceMarkerStyleSet)) {
+
+        double[] distanceToPoints = RoutePointsHelper.computeDistanceToPoints(
+                RoutePointsHelper.toPoints(mapView.getLayers().getBaseLayer().getProjection(), route.getRouteLine().getVertexList())
+        );
+
+        for (Marker marker : RoutePointsHelper.calculateMarksOnRegularDistances(
+                route.getRouteLine().getVertexList(),
+                distanceToPoints,
+                1000d, distanceMarkerStyleSet)) {
             markerLayer.add(marker);
         }
     }
