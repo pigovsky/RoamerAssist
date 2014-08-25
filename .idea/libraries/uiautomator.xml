@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="uiautomator">
+    <CLASSES>
+      <root url="jar://$APPLICATION_HOME_DIR$/sdk/platforms/android-20/uiautomator.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

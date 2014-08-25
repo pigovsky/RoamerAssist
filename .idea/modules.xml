@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RoamerAssist.iml" filepath="$PROJECT_DIR$/RoamerAssist.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RoamerAssistTest/RoamerAssistTest.iml" filepath="$PROJECT_DIR$/RoamerAssistTest/RoamerAssistTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

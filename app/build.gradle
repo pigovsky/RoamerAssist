@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'key'
+            keyPassword 'key'
+            storeFile file('key')
+            storePassword 'key'
+        }
+    }
     compileSdkVersion 20
-    buildToolsVersion "20.0.0"
-
+    buildToolsVersion '20.0.0'
     defaultConfig {
         applicationId "com.pigovsky.roamerassist"
         minSdkVersion 10
@@ -21,14 +28,9 @@ android {
 
 repositories {
     mavenCentral()
-// Nutiteq open access repository
-    maven {
-        url "http://repository-nutiteq.forge.cloudbees.com/release/"
-    }
-    maven {
-        url "http://repository-nutiteq.forge.cloudbees.com/snapshot/"
-    }
-
+    // Nutiteq open access repository
+    maven { url 'http://repository-nutiteq.forge.cloudbees.com/release/' }
+    maven { url 'http://repository-nutiteq.forge.cloudbees.com/snapshot/' }
 }
 
 dependencies {
@@ -40,17 +42,15 @@ dependencies {
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:support-v4:20.+'
     //compile 'com.google.android.gms:play-services:4.2.42'
-
     // Nutiteq SDK itself, mandatory
-    compile "com.nutiteq:nutiteq-3d-sdk:2.3.2"
-    compile "com.nutiteq.advancedlayers:AdvancedLayers:1.0-SNAPSHOT"
-
+    compile 'com.nutiteq:nutiteq-3d-sdk:2.3.2'
+    compile 'com.nutiteq.advancedlayers:AdvancedLayers:1.0-SNAPSHOT'
     // additional dependencies for advanced layers
-    compile "com.google.code.gson:gson:2.2.3"
-    compile "com.jhlabs:javaproj-noawt:1.0.7"
-    compile "com.google.protobuf:protobuf-java:2.4.1"
-    compile "org.mapsforge.android:mapsforge-map:0.3.0"
-    compile "com.samskivert:jmustache:1.5"
-    compile "com.graphhopper:graphhopper:0.1.1"
-    compile "com.vividsolutions:jts:1.13"
+    /*compile 'com.google.code.gson:gson:2.2.3'
+    compile 'com.jhlabs:javaproj-noawt:1.0.7'
+    compile 'com.google.protobuf:protobuf-java:2.4.1'
+    compile 'org.mapsforge.android:mapsforge-map:0.3.0'
+    compile 'com.samskivert:jmustache:1.5'
+    compile 'com.graphhopper:graphhopper:0.1.1'
+    compile 'com.vividsolutions:jts:1.13'*/
 }

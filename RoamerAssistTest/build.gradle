@@ -1,0 +1,9 @@
+apply plugin: 'java'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: "C:/Users/yp/AppData/Local/Android/android-studio/sdk/platforms/android-20",
+            include: ['*.jar'])
+}
+
+//ant.importBuild 'build.xml'
