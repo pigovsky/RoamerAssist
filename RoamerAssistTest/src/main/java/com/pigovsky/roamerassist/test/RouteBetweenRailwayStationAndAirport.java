@@ -12,8 +12,17 @@ import com.android.uiautomator.testrunner.UiAutomatorTestCase;
 import java.io.IOException;
 
 public class RouteBetweenRailwayStationAndAirport extends UiAutomatorTestCase {
-    public void testDemo() throws UiObjectNotFoundException, IOException {
+    /**
+     * Tries to build route between railway station and Boryspil airport
+     *
+     * @throws UiObjectNotFoundException
+     * @throws IOException
+     */
+    public void testRoutingBetweenRailwayStationAndAirport() throws UiObjectNotFoundException, IOException {
 
+        /*
+         * Stop previous instance of app under test
+         */
         Runtime.getRuntime().exec("am force-stop com.pigovsky.roamerassist");
 
         // Simulate a short press on the HOME button.
